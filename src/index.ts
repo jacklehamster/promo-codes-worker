@@ -1,5 +1,5 @@
-import { listSheetsAndFetchData } from "@dobuki/google-sheet-db";
-import { createFetchFromSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders, } from "@dobuki/promo-codes";
+import { listSheetsAndFetchData, updateSheetRow } from "@dobuki/google-sheet-db";
+import { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders, } from "@dobuki/promo-codes";
 
 const REGEX_PROMO = /^\/promo\/([^/]+)(\/(redeem)?)?$/;
 
@@ -27,13 +27,18 @@ export default {
       const cookieStore = workerHeaders.getCookieStore();
       if (redeem) {
         if (request.method === "POST") {
+          const updatePromo = createUpdateSheet(SHEET_ID, credentials, updateSheetRow);
+          const formData = await request.formData();
+          const source = formData.get('src')?.toString();
+
           const promoInfo = await redeemNextPromo(SHEET_ID, {
             sheetName: app,
             app,
             credentials,
-            Source: url.searchParams.get("src") ?? "",
+            Source: source ?? url.searchParams.get("src") ?? "",
             secret: SECRET,
             fetchPromo,
+            updatePromo,
           }, cookieStore);
           const headers = makeHeaders("application/json", workerHeaders.responseCookies);
           if (url.searchParams.get("json")) {

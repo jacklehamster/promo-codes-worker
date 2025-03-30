@@ -100,7 +100,7 @@ export default {
       }
     }
 
-    return new Response("Hello, World!", {
+    return new Response("Hello", {
       headers: { "Content-Type": "text/plain" },
     });
   },

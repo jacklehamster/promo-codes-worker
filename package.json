@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev src/index.ts --config wrangler.dev.toml",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "build": "tsc"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",

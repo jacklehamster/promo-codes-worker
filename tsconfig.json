@@ -11,5 +11,6 @@
     "types": ["@cloudflare/workers-types"],
     "lib": ["esnext", "webworker"],
   },
-  "include": ["src/**/*", "src/declarations.d.ts"]
+  "include": ["src/**/*", "src/declarations.d.ts"],
+  "exclude": ["node_modules"]
 }

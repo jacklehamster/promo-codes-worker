@@ -7,7 +7,7 @@ export default {
   async fetch(request: Request, env: any): Promise<Response> {
     const url = new URL(request.url);
     if (url.pathname === '/favicon.ico') {
-      return Response.redirect("https://i0.wp.com/bignutsgames.com/wp-content/uploads/2024/10/big_nuts_logo.png");
+      return Response.redirect("https://jacklehamster.github.io/promo-codes/icon.png");
     }
 
     const [, app, , redeem] = url.pathname.match(REGEX_PROMO) ?? [];
@@ -64,7 +64,7 @@ export default {
             }), { headers });
           } else if (promoInfo) {
             const headers = makeHeaders("text/html", workerHeaders.responseCookies);
-            return new Response(promoInfo?.createPage() ?? createNoPromoPage({ appId: app }), {
+            return new Response(promoInfo?.createPage(url.href) ?? createNoPromoPage({ appId: app }), {
               headers,
             });
           }
@@ -87,14 +87,14 @@ export default {
           });
         } else {
           const headers = makeHeaders("text/html", workerHeaders.responseCookies);
-          return new Response(promoInfo?.createPage(`/${app}/redeem`) ?? createNoPromoPage({ appId: app }), {
+          return new Response(promoInfo?.createPage(url.href, `/${app}/redeem`) ?? createNoPromoPage({ appId: app }), {
             headers,
           });
         }
       }
     }
 
-    return new Response("Hello", {
+    return new Response("Hello World", {
       headers: { "Content-Type": "text/plain" },
     });
   },

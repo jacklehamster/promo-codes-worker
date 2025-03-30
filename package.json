@@ -12,7 +12,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@dobuki/promo-codes": "^1.0.25",
+    "@dobuki/promo-codes": "^1.0.27",
     "jose": "^6.0.10"
   }
 }

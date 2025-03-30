@@ -1,18 +1,17 @@
 {
   "name": "promo-codes-worker",
   "version": "1.0.0",
-  "module": "dist/index.js",
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "bun run bundler.ts",
-    "dev": "wrangler dev src/index.ts",
+    "dev": "wrangler dev src/index.ts --config wrangler.dev.toml",
     "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250321.0",
+    "@cloudflare/workers-types": "^4.20250327.0",
     "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "@dobuki/promo-codes": "^1.0.22",
+    "jose": "^6.0.10"
   }
 }

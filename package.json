@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "wrangler dev src/index.ts --config wrangler.dev.toml",
     "deploy": "wrangler deploy",
-    "build": "tsc"
+    "build": "bun i && tsc"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",

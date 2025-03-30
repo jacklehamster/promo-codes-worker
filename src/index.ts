@@ -27,6 +27,7 @@ export default {
       const cookieStore = workerHeaders.getCookieStore();
       if (redeem) {
         if (request.method === "POST") {
+          //  POST /promo/app.id/redeem
           const updatePromo = createUpdateSheet(SHEET_ID, credentials, updateSheetRow);
           const formData = await request.formData();
           const source = formData.get('src')?.toString();
@@ -55,6 +56,7 @@ export default {
             });
           }
         } else if (request.method === "GET") {
+          //  GET /promo/app.id/redeem
           const promoInfo = await findPromoForUid({
             sheetId: SHEET_ID,
             app,
@@ -66,16 +68,16 @@ export default {
             return new Response(JSON.stringify(promoInfo ?? {
               message: "No promo available",
             }), { headers });
-          } else {
+          } else if (promoInfo) {
             const headers = makeHeaders("text/html", workerHeaders.responseCookies);
             return new Response(promoInfo?.createPage() ?? createNoPromoPage({ appId: app }), {
               headers,
             });
           }
-        } else {
-          return Response.redirect(`/promo/${app}`, 302);
         }
+        return Response.redirect(`/promo/${app}`, 302);
       } else {
+        //  GET /promo/app.id
         const promoInfo = await retrievePromoData(SHEET_ID, {
           sheetName: app,
           app,

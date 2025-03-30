@@ -2,6 +2,3 @@ name = "promo-codes-worker"
 compatibility_date = "2025-03-21"
 main = "src/index.ts"
 compatibility_flags = ["nodejs_compat"]
-
-[build]
-external_modules = ["googleapis", "dotenv"]

@@ -4,5 +4,4 @@ main = "src/index.ts"
 compatibility_flags = ["nodejs_compat"]
 
 [build]
-# Add googleapis and dotenv as external dependencies
 external_modules = ["googleapis", "dotenv"]

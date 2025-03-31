@@ -69,7 +69,7 @@ export default {
             });
           }
         }
-        return Response.redirect(`/${app}`, 302);
+        return Response.redirect(`${url.origin}/${app}`, 302);
       } else {
         //  GET /app.id
         const promoInfo = await retrievePromoData(SHEET_ID, {

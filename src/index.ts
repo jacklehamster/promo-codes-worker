@@ -24,13 +24,14 @@ export default {
           //  POST /app.id/redeem
           const updatePromo = createUpdateSheet(SHEET_ID, credentials, updateSheetRow);
           const formData = await request.formData();
-          const source = formData.get('src')?.toString();
+          const referrer = request.headers.get('Referer') || 'Direct';
+          const source = formData.get('src')?.toString() || url.searchParams.get("src") || referrer;
 
           const promoInfo = await redeemNextPromo(SHEET_ID, {
             sheetName: app,
             app,
             credentials,
-            Source: source ?? url.searchParams.get("src") ?? "",
+            Source: source,
             secret: SECRET,
             fetchPromo,
             updatePromo,

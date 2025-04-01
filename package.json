@@ -14,7 +14,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@dobuki/promo-codes": "^1.0.29",
+    "@dobuki/promo-codes": "^1.0.30",
     "jose": "^6.0.10"
   }
 }

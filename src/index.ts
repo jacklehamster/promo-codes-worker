@@ -1,5 +1,5 @@
-import { listSheetsAndFetchData, updateSheetRow } from "@dobuki/google-sheet-db";
-import { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders, } from "@dobuki/promo-codes";
+// import { listSheetsAndFetchData, updateSheetRow } from "@dobuki/google-sheet-db";
+// import { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders, } from "@dobuki/promo-codes";
 
 const REGEX_PROMO = /^\/([A-Za-z0-9.-]+)(\/(redeem)?)?$/;
 
@@ -15,6 +15,9 @@ export default {
     const SECRET = env.SECRET_WORD;
 
     if (app) {
+      const { listSheetsAndFetchData, updateSheetRow } = await import("@dobuki/google-sheet-db");
+      const { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders } = await import("@dobuki/promo-codes");
+
       const credentials = env.SHEETS_SERVICE_KEY_JSON;
       const fetchPromo = createFetchFromSheet(SHEET_ID, app, credentials, listSheetsAndFetchData);
       const workerHeaders = new WorkerHeaders(request.headers);

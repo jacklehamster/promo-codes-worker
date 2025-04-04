@@ -1,4 +1,4 @@
-import { listSheetsAndFetchData, updateSheetRow } from "@dobuki/google-sheet-db";
+// import { listSheetsAndFetchData, updateSheetRow } from "@dobuki/google-sheet-db";
 // import { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders, } from "@dobuki/promo-codes";
 
 const REGEX_PROMO = /^\/([A-Za-z0-9.-]+)(\/(redeem)?)?$/;
@@ -15,7 +15,8 @@ export default {
     const SECRET = env.SECRET_WORD;
 
     if (app) {
-      const { createFetchFromSheet, createUpdateSheet, createNoPromoPage, findPromoForUid, redeemNextPromo, retrievePromoData, WorkerHeaders } = await import("@dobuki/promo-codes");
+      const { listSheetsAndFetchData } = await import("@dobuki/google-sheet-db");
+      const { createFetchFromSheet, WorkerHeaders } = await import("@dobuki/promo-codes");
 
       const credentials = env.SHEETS_SERVICE_KEY_JSON;
       const fetchPromo = createFetchFromSheet(SHEET_ID, app, credentials, listSheetsAndFetchData);
@@ -23,16 +24,21 @@ export default {
       const cookieStore = workerHeaders.getCookieStore();
       if (redeem) {
         if (request.method === "POST") {
+          const { updateSheetRow } = await import("@dobuki/google-sheet-db");
+          const { createUpdateSheet, redeemNextPromo } = await import("@dobuki/promo-codes");
+
           //  POST /app.id/redeem
           const updatePromo = createUpdateSheet(SHEET_ID, credentials, updateSheetRow);
           const formData = await request.formData();
           const src = formData.get('src')?.toString() || url.searchParams.get("src") || "";
+          const email = formData.get('email')?.toString() || url.searchParams.get("email") || "";
 
           const promoInfo = await redeemNextPromo(SHEET_ID, {
             sheetName: app,
             app,
             credentials,
             src,
+            email,
             secret: SECRET,
             fetchPromo,
             updatePromo,
@@ -52,6 +58,8 @@ export default {
             });
           }
         } else if (request.method === "GET") {
+          const { createNoPromoPage, findPromoForUid } = await import("@dobuki/promo-codes");
+
           //  GET /app.id/redeem
           const promoInfo = await findPromoForUid({
             sheetId: SHEET_ID,
@@ -73,6 +81,8 @@ export default {
         }
         return Response.redirect(`${url.origin}/${app}`, 302);
       } else {
+        const { createNoPromoPage, retrievePromoData } = await import("@dobuki/promo-codes");
+
         //  GET /app.id
         const promoInfo = await retrievePromoData(SHEET_ID, {
           sheetName: app,

@@ -81,6 +81,19 @@ export default {
         }
         return Response.redirect(`${url.origin}/${app}`, 302);
       } else {
+        const cache = await caches.open("tts-audio-cache"); // Named cache
+        const cacheKey = new Request(url.toString(), request);
+        if (!url.searchParams.get("nocache")) {
+          const response = await cache.match(cacheKey);
+          if (response) {
+            const { initCookies } = await import("@dobuki/promo-codes");
+            await initCookies({ sheetId: SHEET_ID, app, secret: SECRET }, cookieStore)
+            return new Response(response.body, {
+              headers: makeHeaders(url.searchParams.get("json") ? "application/json" : "text/html", workerHeaders.responseCookies),
+            });
+          }
+        }
+
         const { createNoPromoPage, retrievePromoData } = await import("@dobuki/promo-codes");
 
         //  GET /app.id
@@ -88,16 +101,20 @@ export default {
           sheetName: app,
           app,
           secret: SECRET,
-          user: url.searchParams.get("user") ?? "none",
           credentials,
           fetchPromo,
         }, cookieStore);
         if (url.searchParams.get("json")) {
-          const headers = makeHeaders("application/json", workerHeaders.responseCookies);
           return new Response(JSON.stringify(promoInfo), {
-            headers,
+            headers: makeHeaders("application/json", workerHeaders.responseCookies),
           });
         } else {
+          //  Store cached page without cookies
+          await cache.put(cacheKey, new Response(promoInfo?.createPage(url.href, `/${app}/redeem`) ?? createNoPromoPage({ appId: app }), {
+            headers: makeHeaders("text/html", []),
+          }));
+
+
           const headers = makeHeaders("text/html", workerHeaders.responseCookies);
           return new Response(promoInfo?.createPage(url.href, `/${app}/redeem`) ?? createNoPromoPage({ appId: app }), {
             headers,

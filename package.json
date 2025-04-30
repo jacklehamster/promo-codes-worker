@@ -8,13 +8,11 @@
     "build": "bun i && tsc"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250409.0",
-    "dotenv": "^16.4.7",
+    "@cloudflare/workers-types": "^4.20250430.0",
     "googleapis": "^148.0.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@dobuki/promo-codes": "^1.0.37",
-    "jose": "^6.0.10"
+    "@dobuki/promo-codes": "^1.0.38"
   }
 }

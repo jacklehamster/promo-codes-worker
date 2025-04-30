@@ -81,7 +81,7 @@ export default {
         }
         return Response.redirect(`${url.origin}/${app}`, 302);
       } else {
-        const cache = await caches.open("tts-audio-cache"); // Named cache
+        const cache = await caches.open("promo-cache"); // Named cache
         const cacheKey = new Request(url.toString(), request);
         if (!url.searchParams.get("nocache")) {
           const response = await cache.match(cacheKey);
